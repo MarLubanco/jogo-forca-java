@@ -1,3 +1,5 @@
+package model;
+
 public class Letra {
 
     private String letra;

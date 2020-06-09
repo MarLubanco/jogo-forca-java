@@ -1,4 +1,9 @@
 
+import model.Jogador;
+import model.Letra;
+import model.Rodada;
+import service.GameService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -58,7 +63,7 @@ public class JogoForca {
     }
     public static void menu(Jogador jogadorAtual, Integer pontosDaVez) {
         System.out.println();
-        System.out.println("\nJogador: " + jogadorAtual.getNome());
+        System.out.println("\nmodel.Jogador: " + jogadorAtual.getNome());
         System.out.println("Pontos: " + jogadorAtual.getPontos());
         System.out.println("Pontos da roleta: " + pontosDaVez);
     }

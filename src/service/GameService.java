@@ -1,3 +1,9 @@
+package service;
+
+import model.Jogador;
+import model.Letra;
+import model.Rodada;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
