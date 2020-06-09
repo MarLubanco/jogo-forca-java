@@ -38,8 +38,10 @@ public class GameService {
     }
 
     public Jogador trocaJogador(List<Jogador> jogadores, Integer jogadorAtual) {
+        jogadorAtual = jogadorAtual == jogadores.size() ? 0 : jogadorAtual;
+        Integer finalJogadorAtual = jogadorAtual;
         return jogadores.stream()
-                .filter(jogador -> jogador.getId() == (jogadorAtual + 1))
+                .filter(jogador -> jogador.getId() == (finalJogadorAtual + 1))
                 .findAny()
                 .orElse(null);
     }

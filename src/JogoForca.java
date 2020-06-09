@@ -5,6 +5,14 @@ import java.util.Scanner;
 
 public class JogoForca {
     public static void main(String[] args) {
+        rodandoPartida();
+    }
+
+    public static void startForca() {
+        System.out.println("RODA RODA JEQUITI - SILVIO SANTOS");
+    }
+
+    public static void rodandoPartida() {
         Scanner scanner = new Scanner(System.in);
         List<Jogador> jogadores = new ArrayList<>();
         criaJogadores(jogadores);
@@ -36,16 +44,7 @@ public class JogoForca {
             showPalavraAtualizada(rodada.getPalavra());
 
         }
-        System.out.printf("A palavra sorteada : %s%n", palavraSorteada);
-        System.out.println("_".repeat(palavraSorteada.size()));
-
     }
-
-    public static void startForca() {
-        System.out.println("RODA RODA JEQUITI - SILVIO SANTOS");
-    }
-
-    public static void rodandoPartida() {}
 
     public static void showPalavraAtualizada(List<Letra> palavra) {
         System.out.println("Palavra: ");
@@ -59,7 +58,6 @@ public class JogoForca {
     }
     public static void menu(Jogador jogadorAtual, Integer pontosDaVez) {
         System.out.println();
-        System.out.println("_".repeat(30));
         System.out.println("\nJogador: " + jogadorAtual.getNome());
         System.out.println("Pontos: " + jogadorAtual.getPontos());
         System.out.println("Pontos da roleta: " + pontosDaVez);
