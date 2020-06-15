@@ -4,9 +4,9 @@ import model.Letra;
 import model.Rodada;
 import service.GameService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class JogoForca {
     public static void main(String[] args) {
@@ -23,14 +23,13 @@ public class JogoForca {
         criaJogadores(jogadores);
         startForca();
         boolean isPassaVez = false;
-        boolean isPalavraDescoberta = false;
         Jogador jogadorAtual = jogadores.get(0);
         GameService gameService = new GameService();
         Integer pontosDaVez = gameService.pontosDaVez();
         List<Letra> palavraSorteada = gameService.sortingPalavra();
         Rodada rodada;
         showPalavraAtualizada(palavraSorteada);
-        while (!isPalavraDescoberta) {
+        while (gameService.isFimPartida(palavraSorteada)) {
             if (isPassaVez) {
                 jogadorAtual = gameService.trocaJogador(jogadores, jogadorAtual.getId());
             } else {
@@ -49,12 +48,13 @@ public class JogoForca {
             showPalavraAtualizada(rodada.getPalavra());
 
         }
+        mostrarVencedor(jogadores);
     }
 
     public static void showPalavraAtualizada(List<Letra> palavra) {
         System.out.println("Palavra: ");
         palavra.stream().forEach(letra -> {
-            if(letra.isAcertaram()) {
+            if(letra.getLetra().equalsIgnoreCase("\n") || letra.isAcertaram()) {
                 System.out.print(letra.getLetra());
             } else {
                 System.out.print("_");
@@ -73,5 +73,16 @@ public class JogoForca {
         jogadores.add(new Jogador(2, "Deborah", 0));
         jogadores.add(new Jogador(3, "Sergio", 0));
         return jogadores;
+    }
+
+    public static void mostrarVencedor(List<Jogador> jogadores) {
+        List<Jogador> jogadoresOrdenados = jogadores.stream()
+                .sorted((o1, o2)->o1.getPontos().
+                        compareTo(o2.getPontos()))
+                .collect(Collectors.toList());
+        Jogador vencedor = jogadoresOrdenados.get(jogadores.size() - 1);
+        System.out.println("\n VENCEDOR !!!!!");
+        System.out.println("    " + vencedor.getNome() + "     ");
+        System.out.println("    " + vencedor.getPontos() + "   ");
     }
 }
