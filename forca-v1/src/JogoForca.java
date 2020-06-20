@@ -4,20 +4,40 @@ import model.Letra;
 import model.Rodada;
 import service.GameService;
 
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class JogoForca {
-    public static void main(String[] args) {
-        rodandoPartida();
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(4996);
+        try {
+            rodandoPartida(serverSocket);
+        } finally {
+            serverSocket.close();
+        }
     }
 
     public static void startForca() {
         System.out.println("RODA RODA JEQUITI - SILVIO SANTOS");
     }
 
-    public static void rodandoPartida() {
+    public static void rodandoPartida(ServerSocket serverSocket) throws IOException {
+
+        Socket socket = serverSocket.accept();
+        System.out.println("Client connected");
+        //leitura cliente
+        InputStreamReader in = new InputStreamReader(socket.getInputStream());
+        BufferedReader bf = new BufferedReader(in);
+
+
+        //send cliente
+        PrintWriter pr = new PrintWriter(socket.getOutputStream());;
+
         Scanner scanner = new Scanner(System.in);
         List<Jogador> jogadores = new ArrayList<>();
         criaJogadores(jogadores);
@@ -30,20 +50,20 @@ public class JogoForca {
         Rodada rodada;
         showPalavraAtualizada(palavraSorteada);
         while (gameService.isFimPartida(palavraSorteada)) {
-            if (isPassaVez) {
-                jogadorAtual = gameService.trocaJogador(jogadores, jogadorAtual.getId());
-            } else {
-                pontosDaVez = gameService.pontosDaVez();
-            }
-            menu(jogadorAtual, pontosDaVez);
+            pontosDaVez = gameService.pontosDaVez();
+//            menu(jogadorAtual, pontosDaVez);
             System.out.println();
-            System.out.println("Escolha uma letra: ");
-            String letraEscolhida = scanner.next();
-            rodada = gameService.acertouLetra(letraEscolhida, palavraSorteada);
+            String inputClient = bf.readLine();
+            String[] objeto = inputClient.split(" ");
+            System.out.println("Cliente: " + objeto[1]);
+            rodada = gameService.acertouLetra(objeto[1], palavraSorteada);
             palavraSorteada = rodada.getPalavra();
             isPassaVez = rodada.isPassouRodada();
             if(!rodada.isPassouRodada()) {
-                jogadorAtual.setPontos(jogadorAtual.getPontos() + pontosDaVez);
+                Integer finalPontosDaVez = pontosDaVez;
+                jogadores.stream().filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
+                        .forEach(jog -> jog.setPontos(jog.getPontos() + finalPontosDaVez));
+
             }
             showPalavraAtualizada(rodada.getPalavra());
 
