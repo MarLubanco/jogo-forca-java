@@ -164,7 +164,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
 
     public static void main(String []args) throws IOException{
         Clientee app = new Clientee();
-        app.conectar(1);
+        app.conectar(2);
         app.escutar();
     }
 }
