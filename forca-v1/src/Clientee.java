@@ -84,13 +84,13 @@ public class Clientee extends JFrame implements ActionListener, KeyListener {
         bfw.flush();
     }
 
-    public void enviarMensagem(int id, String msg) throws IOException{
+    public void enviarMensagem(String msg) throws IOException{
 
         if(msg.equals("Sair")){
             bfw.write("Desconectado \r\n");
             texto.append("Desconectado \r\n");
         }else{
-            bfw.write(id + " " + msg+"\r\n");
+            bfw.write("1 " + msg+"\r\n");
             texto.append( txtNome.getText() + " diz -> " +         txtMsg.getText()+"\r\n");
         }
         bfw.flush();
@@ -117,7 +117,7 @@ public class Clientee extends JFrame implements ActionListener, KeyListener {
 
     public void sair() throws IOException{
 
-        enviarMensagem(1, "Sair");
+        enviarMensagem("Sair");
         bfw.close();
         ouw.close();
         ou.close();
@@ -129,7 +129,7 @@ public class Clientee extends JFrame implements ActionListener, KeyListener {
 
         try {
             if(e.getActionCommand().equals(btnSend.getActionCommand()))
-                enviarMensagem(1, txtMsg.getText());
+                enviarMensagem(txtMsg.getText());
             else
             if(e.getActionCommand().equals(btnSair.getActionCommand()))
                 sair();
@@ -144,7 +144,7 @@ public class Clientee extends JFrame implements ActionListener, KeyListener {
 
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
             try {
-                enviarMensagem(1, txtMsg.getText());
+                enviarMensagem(txtMsg.getText());
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();

@@ -14,7 +14,7 @@ import java.io.Writer;
 import java.net.Socket;
 import javax.swing.*;
 
-public class Cliente3 extends JFrame implements ActionListener, KeyListener {
+public class Cliente2 extends JFrame implements ActionListener, KeyListener {
 
     private static final long serialVersionUID = 1L;
     private JTextArea texto;
@@ -32,7 +32,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
     private JTextField txtPorta;
     private JTextField txtNome;
 
-    public Cliente3() throws IOException {
+    public Cliente2() throws IOException {
         JLabel lblMessage = new JLabel("Verificar!");
         txtIP = new JTextField("127.0.0.1");
         txtPorta = new JTextField("12345");
@@ -80,7 +80,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
         ou = socket.getOutputStream();
         ouw = new OutputStreamWriter(ou);
         bfw = new BufferedWriter(ouw);
-        bfw.write( id + " " + txtNome.getText()+"\r\n");
+        bfw.write("2 " + txtNome.getText()+"\r\n");
         bfw.flush();
     }
 
@@ -90,7 +90,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
             bfw.write("Desconectado \r\n");
             texto.append("Desconectado \r\n");
         }else{
-            bfw.write(id + " " + msg+"\r\n");
+            bfw.write("2 " + msg+"\r\n");
             texto.append( txtNome.getText() + " diz -> " +         txtMsg.getText()+"\r\n");
         }
         bfw.flush();
@@ -163,7 +163,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
     }
 
     public static void main(String []args) throws IOException{
-        Clientee app = new Clientee();
+        Cliente2 app = new Cliente2();
         app.conectar(2);
         app.escutar();
     }

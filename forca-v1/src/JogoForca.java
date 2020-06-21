@@ -49,7 +49,7 @@ public class JogoForca {
         List<Letra> palavraSorteada = gameService.sortingPalavra();
         Rodada rodada;
         showPalavraAtualizada(palavraSorteada);
-        while (gameService.isFimPartida(palavraSorteada)) {
+        while (gameService.isFimPartida()) {
             pontosDaVez = gameService.pontosDaVez();
 //            menu(jogadorAtual, pontosDaVez);
             System.out.println();
