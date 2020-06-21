@@ -5,10 +5,18 @@ import model.Letra;
 import model.Rodada;
 
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class GameService {
+
+    List<Jogador> jogadores = criaJogadores();
+    Rodada rodada;
+    Integer pontosDaVez = pontosDaVez();
+    List<Letra> palavraSorteada = sortingPalavra();
 
     public GameService() {
     }
@@ -90,5 +98,67 @@ public class GameService {
                 .filter(letra -> !letra.getLetra().equalsIgnoreCase("\n") && !letra.isAcertaram())
                 .count();
         return qtdLetrasFaltando > 0L ? true : false;
+    }
+
+    public void rodandoPartida(ServerSocket serverSocket) throws IOException {
+        System.out.println("Boas vindas arrombados");
+        showPalavraAtualizada(palavraSorteada);
+//        while (isFimPartida(palavraSorteada)) {
+//            pontosDaVez = pontosDaVez();
+//            String inputClient = "1 rola";
+//
+//        }
+//        mostrarVencedor(jogadores);
+    }
+
+    public static void showPalavraAtualizada(List<Letra> palavra) {
+        System.out.println("Palavra: ");
+        palavra.stream().forEach(letra -> {
+            if(letra.getLetra().equalsIgnoreCase("\n") || letra.isAcertaram()) {
+                System.out.print(letra.getLetra());
+            } else {
+                System.out.print("_");
+            }
+        });
+    }
+    public static void menu(Jogador jogadorAtual, Integer pontosDaVez) {
+        System.out.println();
+        System.out.println("\nmodel.Jogador: " + jogadorAtual.getNome());
+        System.out.println("Pontos: " + jogadorAtual.getPontos());
+        System.out.println("Pontos da roleta: " + pontosDaVez);
+    }
+
+    public static List<Jogador> criaJogadores() {
+        List<Jogador> jogadores = new ArrayList<>();
+        jogadores.add(new Jogador(1, "Thome", 0));
+        jogadores.add(new Jogador(2, "Deborah", 0));
+        jogadores.add(new Jogador(3, "Sergio", 0));
+        return jogadores;
+    }
+
+    public static void mostrarVencedor(List<Jogador> jogadores) {
+        List<Jogador> jogadoresOrdenados = jogadores.stream()
+                .sorted((o1, o2)->o1.getPontos().
+                        compareTo(o2.getPontos()))
+                .collect(Collectors.toList());
+        Jogador vencedor = jogadoresOrdenados.get(jogadores.size() - 1);
+        System.out.println("\n VENCEDOR !!!!!");
+        System.out.println("    " + vencedor.getNome() + "     ");
+        System.out.println("    " + vencedor.getPontos() + "   ");
+    }
+
+    public void receberMensagem(String inputClient) {
+        String[] objeto = inputClient.split(" ");
+        System.out.println("Cliente: " + objeto[1]);
+        rodada = acertouLetra(objeto[1], palavraSorteada);
+        palavraSorteada = rodada.getPalavra();
+        if(!rodada.isPassouRodada()) {
+            Integer finalPontosDaVez = pontosDaVez;
+            jogadores.stream()
+                    .filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
+                    .forEach(jog -> jog.setPontos(jog.getPontos() + finalPontosDaVez));
+
+        }
+        showPalavraAtualizada(rodada.getPalavra());
     }
 }

@@ -105,4 +105,5 @@ public class JogoForca {
         System.out.println("    " + vencedor.getNome() + "     ");
         System.out.println("    " + vencedor.getPontos() + "   ");
     }
+
 }
