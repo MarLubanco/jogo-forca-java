@@ -1,6 +1,3 @@
-import model.Jogador;
-import model.Letra;
-import model.Rodada;
 import service.GameService;
 
 import javax.swing.*;
@@ -8,9 +5,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Servidor extends Thread {
 
@@ -72,14 +66,15 @@ public class Servidor extends Thread {
             OutputStream ou = this.con.getOutputStream();
             Writer ouw = new OutputStreamWriter(ou);
             BufferedWriter bfw = new BufferedWriter(ouw);
-            clientes.add(bfw);
+            clientes.add(bfw)
+            ;
             nome = msg = bfr.readLine();
-            while (!"Sair".equalsIgnoreCase(msg) && msg != null) {
+            while (this.gameService.isFimPartida()) {
                 msg = bfr.readLine();
                 sendToAll(bfw, msg);
                 this.gameService.receberMensagem(msg);
-                System.out.println(msg);
             }
+            this.gameService.mostrarVencedor();
         } catch (Exception e) {
             e.printStackTrace();
 

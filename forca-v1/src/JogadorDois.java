@@ -14,7 +14,7 @@ import java.io.Writer;
 import java.net.Socket;
 import javax.swing.*;
 
-public class Cliente3 extends JFrame implements ActionListener, KeyListener {
+public class JogadorDois extends JFrame implements ActionListener, KeyListener {
 
     private static final long serialVersionUID = 1L;
     private JTextArea texto;
@@ -30,14 +30,13 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
     private BufferedWriter bfw;
     private JTextField txtIP;
     private JTextField txtPorta;
-    private JTextField txtNome;
 
-    public Cliente3() throws IOException {
+
+    public JogadorDois() throws IOException {
         JLabel lblMessage = new JLabel("Verificar!");
         txtIP = new JTextField("127.0.0.1");
         txtPorta = new JTextField("12345");
-        txtNome = new JTextField("Cliente");
-        Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
+        Object[] texts = {lblMessage, txtIP, txtPorta};
         JOptionPane.showMessageDialog(null, texts);
         pnlContent = new JPanel();
         texto = new JTextArea(10, 20);
@@ -65,7 +64,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
         pnlContent.setBackground(Color.LIGHT_GRAY);
         texto.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
         txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
-        setTitle(txtNome.getText());
+        setTitle("Deborah");
         setContentPane(pnlContent);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -80,7 +79,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
         ou = socket.getOutputStream();
         ouw = new OutputStreamWriter(ou);
         bfw = new BufferedWriter(ouw);
-        bfw.write( id + " " + txtNome.getText()+"\r\n");
+        bfw.write("2 " + getTitle()+"\r\n");
         bfw.flush();
     }
 
@@ -90,8 +89,8 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
             bfw.write("Desconectado \r\n");
             texto.append("Desconectado \r\n");
         }else{
-            bfw.write(id + " " + msg+"\r\n");
-            texto.append( txtNome.getText() + " diz -> " +         txtMsg.getText()+"\r\n");
+            bfw.write("2 " + msg+"\r\n");
+            texto.append( getTitle() + " diz -> " +         txtMsg.getText()+"\r\n");
         }
         bfw.flush();
         txtMsg.setText("");
@@ -163,7 +162,7 @@ public class Cliente3 extends JFrame implements ActionListener, KeyListener {
     }
 
     public static void main(String []args) throws IOException{
-        Clientee app = new Clientee();
+        JogadorDois app = new JogadorDois();
         app.conectar(2);
         app.escutar();
     }

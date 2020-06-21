@@ -93,15 +93,15 @@ public class GameService {
         return new Rodada(palavra, acertou.get());
     }
 
-    public boolean isFimPartida(List<Letra> palavras) {
-        long qtdLetrasFaltando = palavras.stream()
+    public boolean isFimPartida() {
+        long qtdLetrasFaltando = this.palavraSorteada.stream()
                 .filter(letra -> !letra.getLetra().equalsIgnoreCase("\n") && !letra.isAcertaram())
                 .count();
         return qtdLetrasFaltando > 0L ? true : false;
     }
 
     public void rodandoPartida(ServerSocket serverSocket) throws IOException {
-        System.out.println("Boas vindas arrombados");
+        System.out.println("Boas vindas ao RODA RODA");
         showPalavraAtualizada(palavraSorteada);
 //        while (isFimPartida(palavraSorteada)) {
 //            pontosDaVez = pontosDaVez();
@@ -136,7 +136,7 @@ public class GameService {
         return jogadores;
     }
 
-    public static void mostrarVencedor(List<Jogador> jogadores) {
+    public void mostrarVencedor() {
         List<Jogador> jogadoresOrdenados = jogadores.stream()
                 .sorted((o1, o2)->o1.getPontos().
                         compareTo(o2.getPontos()))
@@ -149,7 +149,9 @@ public class GameService {
 
     public void receberMensagem(String inputClient) {
         String[] objeto = inputClient.split(" ");
-        System.out.println("Cliente: " + objeto[1]);
+        String nomeJogador = jogadores.stream().filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
+                .map(Jogador::getNome).collect(Collectors.joining());
+        System.out.println("\n Jogador(a): " + nomeJogador + " escolheu letra: " + objeto[1] + "\n");
         rodada = acertouLetra(objeto[1], palavraSorteada);
         palavraSorteada = rodada.getPalavra();
         if(!rodada.isPassouRodada()) {
