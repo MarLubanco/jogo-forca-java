@@ -1,4 +1,9 @@
+import jdk.internal.org.jline.utils.ShutdownHooks;
 import org.apache.thrift.TException;
+
+import com.soofaloofa.taskmanager.Task;
+import org.apache.thrift.TProcessor;
+import org.apache.thrift.protocol.TMessage;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -14,6 +19,7 @@ public class JavaClient {
 
             TProtocol protocol = new TBinaryProtocol(transport);
 
+            Task task = new Task();
             perform();
 
             transport.close();
