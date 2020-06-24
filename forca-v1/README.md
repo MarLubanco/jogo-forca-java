@@ -12,7 +12,7 @@
     
 ## Jogar 
     clone o repositório https://github.com/MarLubanco/jogo-forca-java.git
-    
+    git fetch --all
 ### Jogar V1
     
 ##### rode o comando
