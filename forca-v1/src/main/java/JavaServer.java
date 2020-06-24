@@ -12,6 +12,7 @@ import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 public class JavaServer {
 
     public static CalculatorHandler handler;
+    public static Task task;
 
     public static TProcessor processor;
 
