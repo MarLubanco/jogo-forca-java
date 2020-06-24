@@ -4,13 +4,9 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-
 @SuppressWarnings({"cast", "rawtypes", "serial", "unchecked", "unused"})
 public class tutorialConstants {
 
-  /**
-   * Define a constant using the `const` keyword.
-   */
   public static final long DEFAULT_ID = -1L;
 
 }

@@ -6,8 +6,6 @@ import org.apache.thrift.transport.TTransport;
 
 public class MultiplicationClient {
     public static void main(String [] args) {
-
-
         try {
             TTransport transport;
 
@@ -27,7 +25,6 @@ public class MultiplicationClient {
 
     private static void perform(MultiplicationService.Client client) throws TException
     {
-
         int product = client.multiply(3,5);
         System.out.println("3*5=" + product);
     }
