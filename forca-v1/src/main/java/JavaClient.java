@@ -13,7 +13,6 @@ public class JavaClient {
             transport.open();
 
             TProtocol protocol = new TBinaryProtocol(transport);
-//            Calculator.Client client = new Calculator.Client(protocol);
 
             perform();
 
