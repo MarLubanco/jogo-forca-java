@@ -10,14 +10,20 @@
     
     . V2.0 - Implementada com Socket, então todos os jogadores podem ir falando as letras simultaneamentes.
     
+    
+    . V3.1 - Implementado com RPC, junto com Apache Thrift, porém só conseguimos implemntar
+    para somente um jogador jogar, ao invés de multijogadores.
 ## Jogar 
-    clone o repositório https://github.com/MarLubanco/jogo-forca-java.git
+    clone o repositório:
+    git clone https://github.com/MarLubanco/jogo-forca-java.git
+    cd jogo-forca
     git fetch --all
 ### Jogar V1
     
 ##### rode o comando
      git checkout feat-v1
      
+     -- Primeiro
      start a classe JogoForca.java
      
 
@@ -26,12 +32,24 @@
 ##### rode o comando
      git checkout feat-v2
      
-     #primeiro
+    -- Primeiro
      start a classe Servidor.java
      
-     #após o servidor estar ativo, execute as classes
+     após o servidor estar ativo, execute as classes
      JogadorUm, JogadorDois e JogadorTres.
      
      Irá aparecer um chat dos três jogadores, basta selecionar o jogador
      que deseja e ir digitando a letra.
+     
+ 
+### Jogar V3.1
+    
+##### rode o comando
+     git checkout feat-v3.1
+     
+     -- Primeiro
+     start a classe MultiplicationServer.java
+     
+     após o servidor estar ativo, execute as classe JogadorUm
+     digite uma letra no console do jogador
      
