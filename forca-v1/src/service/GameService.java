@@ -6,7 +6,6 @@ import model.Rodada;
 
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -17,6 +16,7 @@ public class GameService {
     Rodada rodada;
     Integer pontosDaVez = pontosDaVez();
     List<Letra> palavraSorteada = sortingPalavra();
+    List<String> letrasTestadas = new ArrayList<>();
 
     public GameService() {
     }
@@ -39,29 +39,16 @@ public class GameService {
         }
         Random rand = new Random();
         int valorSorteado = rand.nextInt(palavras.size() -1);
-        int palavraDois = rand.nextInt(palavras.size() -1);
-        int palavraTres = rand.nextInt(palavras.size() - 1);
         String palavraSorteada = palavras.get(valorSorteado);
-        String palavraSorteadaDois = palavras.get(palavraDois);
-        String palavraSorteadaTres = palavras.get(palavraTres);
         List<Letra> palavraFinal = new ArrayList<>();
 
         char[] chars = palavraSorteada.toCharArray();
-        char[] charsDois = palavraSorteadaDois.toCharArray();
-        char[] charsTres = palavraSorteadaTres.toCharArray();
 
         List<String> palavraAux = new ArrayList<>();
         for(int i=0; i < chars.length ; i++) {
             palavraAux.add(String.valueOf(chars[i]));
         }
         palavraAux.add("\n");
-        for(int i=0; i < charsDois.length ; i++) {
-            palavraAux.add(String.valueOf(charsDois[i]));
-        }
-        palavraAux.add("\n");
-        for(int i=0; i < charsTres.length ; i++) {
-            palavraAux.add(String.valueOf(charsTres[i]));
-        }
         palavraAux.stream()
                 .forEach(letra -> palavraFinal.add(new Letra(letra.toString(), false)));
         return palavraFinal;
@@ -76,7 +63,7 @@ public class GameService {
                 .orElse(null);
     }
     public Integer pontosDaVez() {
-        List<Integer> pontos = Arrays.asList(100, 150, 200, 300, 500, 600, 800, 1000);
+        List<Integer> pontos = Arrays.asList(5, 10, 6, 4, 8, 15, 20, 1);
         Random rand = new Random();
         int indexPonto = rand.nextInt(pontos.size());
         return pontos.get(indexPonto);
@@ -111,7 +98,17 @@ public class GameService {
 //        mostrarVencedor(jogadores);
     }
 
-    public static void showPalavraAtualizada(List<Letra> palavra) {
+    public void showLetrasTestadas() {
+        String letras = "";
+        for (String letrasTestada : letrasTestadas) {
+            letras += letrasTestada + " - ";
+        }
+        System.out.println("Letras anteriores: " + letras);
+    }
+
+    public void showPalavraAtualizada(List<Letra> palavra) {
+        showHanking();
+        showLetrasTestadas();
         System.out.println("Palavra: ");
         palavra.stream().forEach(letra -> {
             if(letra.getLetra().equalsIgnoreCase("\n") || letra.isAcertaram()) {
@@ -147,20 +144,54 @@ public class GameService {
         System.out.println("    " + vencedor.getPontos() + "   ");
     }
 
+    public void showHanking() {
+        System.out.println("   HANKING                  ");
+        jogadores.stream().forEach(jogador -> {
+           System.out.println("    " + jogador.getNome() + " - " + jogador.getPontos() );
+        });
+    }
+
+    public String showHankingIndividual() {
+        String hanking = " \n    HANKING \n ";
+        for (Jogador jogador : jogadores) {
+            hanking += "    " + jogador.getNome() + " - " + jogador.getPontos() + "\n";
+        };
+        return hanking;
+    }
+
     public void receberMensagem(String inputClient) {
         String[] objeto = inputClient.split(" ");
-        String nomeJogador = jogadores.stream().filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
+        if(objeto[1].equals(":ranking")) {
+            showHanking();
+        }
+
+        String nomeJogador = jogadores.stream()
+                .filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
                 .map(Jogador::getNome).collect(Collectors.joining());
         System.out.println("\n Jogador(a): " + nomeJogador + " escolheu letra: " + objeto[1] + "\n");
         rodada = acertouLetra(objeto[1], palavraSorteada);
         palavraSorteada = rodada.getPalavra();
+        Integer finalPontosDaVez =0;
         if(!rodada.isPassouRodada()) {
-            Integer finalPontosDaVez = pontosDaVez;
-            jogadores.stream()
-                    .filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
-                    .forEach(jog -> jog.setPontos(jog.getPontos() + finalPontosDaVez));
-
+            finalPontosDaVez = pontosDaVez;
+        } if(letrasTestadas.contains(objeto[1])) {
+            finalPontosDaVez = -1;
+        } else if(rodada.isPassouRodada()) {
+            finalPontosDaVez = -3;
         }
+
+        if(!objeto[1].equals(":ranking")) {
+            letrasTestadas.add(objeto[1]);
+        }
+
+        Integer finalPontosDaVez1 = finalPontosDaVez;
+        jogadores.stream()
+                .filter(jog -> jog.getId() == Integer.valueOf(objeto[0]))
+                .forEach(jog -> {
+                    System.out.println("Jogador " + jog.getNome() + " recebe: " + finalPontosDaVez1 + " pontos");
+                    jog.setPontos(jog.getPontos() + finalPontosDaVez1);
+                });
+
         showPalavraAtualizada(rodada.getPalavra());
     }
 }

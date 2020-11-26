@@ -56,39 +56,48 @@ public class Servidor extends Thread {
     }
 
     public void run() {
-        try {
-            gameService.rodandoPartida(server);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            String msg;
-            OutputStream ou = this.con.getOutputStream();
-            Writer ouw = new OutputStreamWriter(ou);
-            BufferedWriter bfw = new BufferedWriter(ouw);
-            clientes.add(bfw)
-            ;
-            nome = msg = bfr.readLine();
-            while (this.gameService.isFimPartida()) {
-                msg = bfr.readLine();
-                sendToAll(bfw, msg);
-                this.gameService.receberMensagem(msg);
+            try {
+                gameService.rodandoPartida(server);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            this.gameService.mostrarVencedor();
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                String msg;
+                OutputStream ou = this.con.getOutputStream();
+                Writer ouw = new OutputStreamWriter(ou);
+                BufferedWriter bfw = new BufferedWriter(ouw);
+                clientes.add(bfw);
+                nome = msg = bfr.readLine();
+                while (this.gameService.isFimPartida()) {
+                    msg = bfr.readLine();
+                    if(msg.split(" ")[1].equals(":ranking")) {
+                        sendTo(bfw, this.gameService.showHankingIndividual());
+                    }
+                    sendToAll(bfw, msg);
+                    this.gameService.receberMensagem(msg);
+                }
+                this.gameService.mostrarVencedor();
+            } catch (Exception e) {
+                e.printStackTrace();
 
-        }
+            }
+    }
+
+    public void sendTo(BufferedWriter bwSaida, String msg) throws IOException {
+        BufferedWriter bwS;
+//            if (!(bwSaida == bwS)) {
+            clientes.get(0).write(nome + " -> " + msg + "\r\n");
+            clientes.get(0).flush();
     }
 
     public void sendToAll(BufferedWriter bwSaida, String msg) throws IOException {
         BufferedWriter bwS;
         for (BufferedWriter bw : clientes) {
             bwS = (BufferedWriter) bw;
-            if (!(bwSaida == bwS)) {
+//            if (!(bwSaida == bwS)) {
                 bw.write(nome + " -> " + msg + "\r\n");
                 bw.flush();
-            }
+//            }
         }
     }
 
